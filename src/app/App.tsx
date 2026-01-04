@@ -2,8 +2,9 @@ import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 import { AnimatedStars } from "./components/AnimatedStars";
 import { FeaturesPage } from "./components/FeaturesPage";
-import chatSceneImg from "figma:asset/99517f0890f8e08f29d063b1abb87002507d92e3.png";
-import logoSceneImg from "figma:asset/3c8a9035f72e3d6f3bf8be4b238152d34ac4f7fa.png";
+// ✅ THIS IS CORRECT (Local path)
+import someImage from '../assets/99517f0890f8e08f29d063b1abb87002507d92e3.png';
+import anotherImage from '../assets/3c8a9035f72e3d6f3bf8be4b238152d34ac4f7fa.png';
 
 // 6 conversation messages - Alternating between Girl and Boy
 const conversation = [
