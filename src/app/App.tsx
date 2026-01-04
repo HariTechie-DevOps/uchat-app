@@ -2,56 +2,57 @@ import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
 import { AnimatedStars } from "./components/AnimatedStars";
 import { FeaturesPage } from "./components/FeaturesPage";
-// ✅ THIS IS CORRECT (Local path)
-import someImage from '../assets/99517f0890f8e08f29d063b1abb87002507d92e3.png';
-import anotherImage from '../assets/3c8a9035f72e3d6f3bf8be4b238152d34ac4f7fa.png';
+
+// ✅ FIXED IMPORTS: Mapping your long filenames to the variables used in the code
+import chatSceneImg from '../assets/99517f0890f8e08f29d063b1abb87002507d92e3.png';
+import logoSceneImg from '../assets/3c8a9035f72e3d6f3bf8be4b238152d34ac4f7fa.png';
 
 // 6 conversation messages - Alternating between Girl and Boy
 const conversation = [
   {
     id: 1,
-    sender: "girl", // Girl sends Japanese
-    receiver: "boy", // Boy receives with English translation
+    sender: "girl",
+    receiver: "boy",
     originalText: "こんにちは！元気ですか？",
     translatedText: "Hello! How are you?",
     direction: "Japanese → English",
   },
   {
     id: 2,
-    sender: "boy", // Boy sends English
-    receiver: "girl", // Girl receives with Japanese translation
+    sender: "boy",
+    receiver: "girl",
     originalText: "I'm doing great! What about you?",
     translatedText: "元気だよ！あなたは？",
     direction: "English → Japanese",
   },
   {
     id: 3,
-    sender: "girl", // Girl sends Japanese
-    receiver: "boy", // Boy receives with English translation
+    sender: "girl",
+    receiver: "boy",
     originalText: "私もとても良いです！",
     translatedText: "I'm very good too!",
     direction: "Japanese → English",
   },
   {
     id: 4,
-    sender: "boy", // Boy sends English
-    receiver: "girl", // Girl receives with Japanese translation
+    sender: "boy",
+    receiver: "girl",
     originalText: "That's wonderful to hear!",
     translatedText: "それは素晴らしい！",
     direction: "English → Japanese",
   },
   {
     id: 5,
-    sender: "girl", // Girl sends Japanese
-    receiver: "boy", // Boy receives with English translation
+    sender: "girl",
+    receiver: "boy",
     originalText: "このアプリは本当に便利ですね",
     translatedText: "This app is really convenient",
     direction: "Japanese → English",
   },
   {
     id: 6,
-    sender: "boy", // Boy sends English
-    receiver: "girl", // Girl receives with Japanese translation
+    sender: "boy",
+    receiver: "girl",
     originalText: "Yes! We can communicate perfectly!",
     translatedText: "はい！完璧にコミュニケーションできます！",
     direction: "English → Japanese",
@@ -68,7 +69,6 @@ export default function App() {
   useEffect(() => {
     if (currentPage === 'chat') {
       if (currentMessage >= conversation.length) {
-        // All messages done, move to features page
         const featuresTimer = setTimeout(() => {
           setCurrentPage('features');
         }, 1500);
@@ -77,15 +77,12 @@ export default function App() {
 
       const timers: NodeJS.Timeout[] = [];
 
-      // Stage 1: Sending - show message being sent (0-2.5s)
       setMessageStage("sending");
 
-      // Stage 2: Receiving with Translation - show translation appearing (2.5-7.5s)
       timers.push(
         setTimeout(() => setMessageStage("receiving"), 2500),
       );
 
-      // Stage 3: Done, pause before next message (7.5-8.5s)
       timers.push(
         setTimeout(() => {
           setMessageStage("done");
@@ -97,7 +94,6 @@ export default function App() {
     }
 
     if (currentPage === 'features') {
-      // Show features for 8 seconds, then move to logo page
       const logoTimer = setTimeout(() => {
         setCurrentPage('logo');
       }, 8000);
@@ -119,10 +115,8 @@ export default function App() {
             transition={{ duration: 1 }}
             className="relative w-full h-full"
           >
-            {/* Background with stars */}
             <AnimatedStars />
 
-            {/* Chat scene image */}
             <motion.div
               className="absolute inset-0"
               initial={{ scale: 1.05 }}
@@ -136,10 +130,8 @@ export default function App() {
               />
             </motion.div>
 
-            {/* Overlay gradient */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40" />
 
-            {/* App intro title */}
             <motion.div
               initial={{ opacity: 0, y: -40 }}
               animate={{ opacity: 1, y: 0 }}
@@ -154,7 +146,6 @@ export default function App() {
               </p>
             </motion.div>
 
-            {/* Translation Direction Indicator */}
             {msg && (
               <motion.div
                 key={`direction-${currentMessage}`}
@@ -206,7 +197,6 @@ export default function App() {
               </motion.div>
             )}
 
-            {/* Translating indicator - shows during receiving stage */}
             {msg && messageStage === "receiving" && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -245,13 +235,11 @@ export default function App() {
               </motion.div>
             )}
 
-            {/* Messages */}
             <AnimatePresence mode="wait">
               {msg && (
                 <motion.div
                   key={`conversation-${currentMessage}`}
                 >
-                  {/* Sending Stage - Shows on sender's side */}
                   {messageStage === "sending" && (
                     <motion.div
                       initial={{
@@ -284,7 +272,6 @@ export default function App() {
                             {msg.originalText}
                           </p>
                         </div>
-                        {/* Glow effect */}
                         <motion.div
                           className="absolute inset-0 rounded-xl md:rounded-2xl -z-10"
                           animate={{
@@ -300,7 +287,6 @@ export default function App() {
                             ease: "easeInOut",
                           }}
                         />
-                        {/* Sending indicator */}
                         <motion.div
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
@@ -312,7 +298,6 @@ export default function App() {
                     </motion.div>
                   )}
 
-                  {/* Receiving Stage - Shows on receiver's side with translation */}
                   {messageStage === "receiving" && (
                     <motion.div
                       initial={{
@@ -337,7 +322,6 @@ export default function App() {
                               : "bg-gradient-to-br from-blue-500/95 to-blue-600/95 rounded-tr-sm"
                           } text-white shadow-2xl max-w-[280px] md:max-w-md lg:max-w-lg`}
                         >
-                          {/* Original text - TOP */}
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -352,7 +336,6 @@ export default function App() {
                             </p>
                           </motion.div>
 
-                          {/* Translation divider with animation */}
                           <motion.div
                             initial={{ scaleX: 0 }}
                             animate={{ scaleX: 1 }}
@@ -363,7 +346,6 @@ export default function App() {
                             className="border-t border-white/40 my-2 md:my-3 origin-left"
                           />
 
-                          {/* Translation - BOTTOM */}
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -392,7 +374,6 @@ export default function App() {
                             </div>
                           </motion.div>
                         </div>
-                        {/* Glow effect */}
                         <motion.div
                           className="absolute inset-0 rounded-xl md:rounded-2xl -z-10"
                           animate={{
@@ -415,7 +396,6 @@ export default function App() {
               )}
             </AnimatePresence>
 
-            {/* Progress indicator */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -452,7 +432,6 @@ export default function App() {
               </div>
             </motion.div>
 
-            {/* Message counter */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -478,13 +457,8 @@ export default function App() {
             transition={{ duration: 1 }}
             className="relative w-full h-full"
           >
-            {/* Background with stars */}
             <AnimatedStars />
-            
-            {/* Dark overlay */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/60 to-black/40" />
-            
-            {/* Features Content */}
             <div className="relative z-10">
               <FeaturesPage />
             </div>
@@ -497,10 +471,8 @@ export default function App() {
             transition={{ duration: 1.5, ease: "easeOut" }}
             className="relative w-full h-full"
           >
-            {/* Background with stars */}
             <AnimatedStars />
 
-            {/* Logo scene image */}
             <motion.div className="absolute inset-0">
               <img
                 src={logoSceneImg}
@@ -509,10 +481,8 @@ export default function App() {
               />
             </motion.div>
 
-            {/* Dark overlay for better text contrast */}
             <div className="absolute inset-0 bg-black/30" />
 
-            {/* Animated logo text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center px-4">
               <motion.div
                 initial={{ opacity: 0, y: 40 }}
@@ -553,7 +523,6 @@ export default function App() {
                 </motion.p>
               </motion.div>
 
-              {/* Floating language badges */}
               <motion.div
                 className="flex flex-wrap gap-2 md:gap-3 justify-center max-w-4xl"
                 initial={{ opacity: 0, y: 20 }}
@@ -561,16 +530,8 @@ export default function App() {
                 transition={{ duration: 1, delay: 1.2 }}
               >
                 {[
-                  "English",
-                  "Español",
-                  "Français",
-                  "Deutsch",
-                  "日本語",
-                  "中文",
-                  "العربية",
-                  "Português",
-                  "Italiano",
-                  "Русский",
+                  "English", "Español", "Français", "Deutsch", "日本語", 
+                  "中文", "العربية", "Português", "Italiano", "Русский",
                 ].map((language, index) => (
                   <motion.div
                     key={language}
@@ -595,19 +556,10 @@ export default function App() {
                         {language}
                       </span>
                     </div>
-                    {/* Hover glow */}
-                    <motion.div
-                      className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      style={{
-                        boxShadow:
-                          "0 0 20px rgba(255, 255, 255, 0.4)",
-                      }}
-                    />
                   </motion.div>
                 ))}
               </motion.div>
 
-              {/* Subtitle */}
               <motion.p
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -617,7 +569,6 @@ export default function App() {
                 Break language barriers. Connect globally.
               </motion.p>
 
-              {/* Get Started Button */}
               <motion.button
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -628,20 +579,11 @@ export default function App() {
                 onClick={() => alert('Get Started - Coming Soon!')}
               >
                 <div className="relative px-8 md:px-12 py-3 md:py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full shadow-2xl transition-all duration-300 group-hover:shadow-blue-500/50 overflow-hidden">
-                  {/* Button shimmer effect */}
                   <motion.div
                     className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                    animate={{
-                      x: ['-100%', '200%'],
-                    }}
-                    transition={{
-                      duration: 3,
-                      repeat: Infinity,
-                      ease: 'linear',
-                      repeatDelay: 1,
-                    }}
+                    animate={{ x: ['-100%', '200%'] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: 'linear', repeatDelay: 1 }}
                   />
-                  
                   <div className="relative flex items-center gap-2 md:gap-3">
                     <span className="text-white text-base md:text-lg lg:text-xl tracking-wide">
                       Get Started
@@ -658,38 +600,8 @@ export default function App() {
                     </motion.svg>
                   </div>
                 </div>
-
-                {/* Button glow effect */}
-                <motion.div
-                  className="absolute inset-0 rounded-full -z-10"
-                  animate={{
-                    boxShadow: [
-                      '0 0 20px rgba(59, 130, 246, 0.5)',
-                      '0 0 40px rgba(147, 51, 234, 0.7)',
-                      '0 0 20px rgba(59, 130, 246, 0.5)',
-                    ],
-                  }}
-                  transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-                />
               </motion.button>
             </div>
-
-            {/* Pulsing ambient glow effect */}
-            <motion.div
-              className="absolute inset-0 pointer-events-none"
-              animate={{
-                background: [
-                  "radial-gradient(circle at 50% 40%, rgba(147, 197, 253, 0.15) 0%, transparent 60%)",
-                  "radial-gradient(circle at 50% 40%, rgba(196, 181, 253, 0.15) 0%, transparent 60%)",
-                  "radial-gradient(circle at 50% 40%, rgba(147, 197, 253, 0.15) 0%, transparent 60%)",
-                ],
-              }}
-              transition={{
-                duration: 5,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            />
           </motion.div>
         )}
       </AnimatePresence>
