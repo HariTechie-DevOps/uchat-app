@@ -22,7 +22,7 @@ export default function App() {
   const [messageStage, setMessageStage] = useState<"sending" | "receiving" | "done">("sending");
 
   // Global Redirect URL (Pointed to your Spring Boot Backend)
-  const LOGIN_URL = "http://localhost:8080/signin.html";
+  const LOGIN_URL = "/login";
 
   useEffect(() => {
     // 1. HANDLES THE 60-SECOND AUTO-REDIRECT
