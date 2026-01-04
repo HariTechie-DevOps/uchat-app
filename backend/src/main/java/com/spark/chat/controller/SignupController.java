@@ -6,15 +6,13 @@ import com.spark.chat.entity.LanguagePreference;
 import com.spark.chat.repository.LanguageRepository;
 import com.spark.chat.services.SignupService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller; // Changed from RestController
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller // Use @Controller so we can return both HTML and JSON
 @CrossOrigin(origins = "http://localhost:5173", allowedHeaders = "*")
-@RequestMapping("/api")
 public class SignupController {
 
     private final SignupService service;
@@ -26,20 +24,54 @@ public class SignupController {
         this.service = service;
     }
 
-    /**
-     * SPA ROUTING FIX
-     * Since this handles the browser's URL navigation, we use the full path.
-     */
-    @GetMapping(value = {"/signin", "/signup", "/send-otp", "/reset-password", "/choose-language"})
-    public ModelAndView redirectToIndex() {
-        return new ModelAndView("forward:/index.html");
+    // ==========================================
+    // 1. PAGE ROUTING (Returns HTML)
+    // ==========================================
+
+    @GetMapping("/")
+    public String showLanding() {
+        return "forward:/landing.html"; // Your React Animation
     }
 
-    /**
-     * 1. GET ALL LANGUAGES
-     * Access: GET http://localhost:8080/api/languages
-     */
-    @GetMapping("/languages")
+    @GetMapping("/login")
+    public String showLogin() {
+        return "forward:/signin.html";
+    }
+
+    @GetMapping("/verify")
+    public String showOtp() {
+        return "forward:/sendotp.html";
+    }
+
+    @GetMapping("/reset-password")
+    public String showReset() {
+        return "forward:/resetpassword.html";
+    }
+
+    @GetMapping("/choose-language")
+    public String showLanguageSelection() {
+        return "forward:/chooseyourlanguage.html";
+    }
+
+    // ==========================================
+    // 2. API ENDPOINTS (Returns JSON Data)
+    // Note: Use @ResponseBody on these methods
+    // ==========================================
+
+    @PostMapping("/api/signup")
+    @ResponseBody
+    public SignupResponse signup(@RequestBody SignupRequest request) {
+        return service.handlesignup(request);
+    }
+
+    @PostMapping("/api/signin")
+    @ResponseBody
+    public SignupResponse signin(@RequestBody SignupRequest request) {
+        return service.handleSignin(request); 
+    }
+
+    @GetMapping("/api/languages")
+    @ResponseBody
     public List<String> getSupportedLanguages() {
         List<LanguagePreference> allPrefs = langRepo.findAll();
         if (allPrefs.isEmpty()) {
@@ -52,42 +84,26 @@ public class SignupController {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 2. SIGNUP & SIGNIN
-     * Access: POST http://localhost:8080/api/signup
-     */
-    @PostMapping("/signup")
-    public SignupResponse signup(@RequestBody SignupRequest request) {
-        return service.handlesignup(request);
-    }
-
-    @PostMapping("/signin")
-    public SignupResponse signin(@RequestBody SignupRequest request) {
-        return service.handleSignin(request); 
-    }
-    
-    /**
-     * 3. OTP & PASSWORD MANAGEMENT
-     */
-    @PostMapping("/password/send-otp")
+    @PostMapping("/api/password/send-otp")
+    @ResponseBody
     public SignupResponse sendOtp(@RequestBody Map<String, String> payload) {
         return service.sendOtp(payload.get("mobile"));
     }
 
-    @PostMapping("/password/verify-otp")
+    @PostMapping("/api/password/verify-otp")
+    @ResponseBody
     public SignupResponse verifyOtp(@RequestBody Map<String, String> payload) {
         return service.verifyOtp(payload.get("mobile"), payload.get("otp"));
     }
 
-    @PostMapping("/password/reset")
+    @PostMapping("/api/password/reset")
+    @ResponseBody
     public SignupResponse resetPassword(@RequestBody Map<String, String> payload) {
         return service.updatePassword(payload.get("mobile"), payload.get("password"));
     }
 
-    /**
-     * 4. USER PREFERENCES
-     */
-    @PostMapping("/save-language")
+    @PostMapping("/api/save-language")
+    @ResponseBody
     public SignupResponse saveLanguage(@RequestBody Map<String, String> request) {
         String mobile = request.get("mobile");
         String language = request.get("language");
